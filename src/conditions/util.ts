@@ -1,4 +1,3 @@
-import { JSONPath } from "jsonpath-plus";
 import _ from "lodash";
 import { TrueCondition as TrueConditionFunction } from "./TrueCondition";
 import { EqualsCondition as EqualsConditionFucntion } from "./EqualsCondition";
@@ -149,22 +148,24 @@ export class ConditionUtil {
   }
 
   public static getValueByPath(context: any, valuePathOrValue: any) {
-    // Check if the value is JSONPath
     if (
       valuePathOrValue &&
       typeof valuePathOrValue === "string" &&
       valuePathOrValue.startsWith("$.")
     ) {
-      let jsonPathVal = JSONPath({
-        path: valuePathOrValue,
-        json: context,
-        wrap: false,
-      });
-      if (Array.isArray(jsonPathVal)) {
-        jsonPathVal = _.flattenDeep(jsonPathVal);
+      const pathSegments = valuePathOrValue.slice(2).split(".");
+      let current = context;
+
+      for (const segment of pathSegments) {
+        if (current === undefined || current === null) {
+          return undefined;
+        }
+        current = current[segment];
       }
-      return jsonPathVal;
+
+      return current;
     }
+
     return valuePathOrValue;
   }
 }
