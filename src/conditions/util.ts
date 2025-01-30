@@ -1,7 +1,5 @@
 import { JSONPath } from "jsonpath-plus";
-import flattendeep from 'lodash.flattendeep';
-
-
+import _ from "lodash";
 import { TrueCondition as TrueConditionFunction } from "./TrueCondition";
 import { EqualsCondition as EqualsConditionFucntion } from "./EqualsCondition";
 import { NotEqualsCondition as NotEqualsConditionFunction } from "./NotEqualsCondition";
@@ -27,9 +25,8 @@ export class ConditionUtil {
   public static readonly NOT = new NotConditionFunction();
   public static readonly OR = new OrConditionFunction();
   public static readonly STARTS_WITH = new StartsWithCondition();
-  private static _customConditionFunctions: IDictionary<
-    IFunctionCondition
-  > = {};
+  private static _customConditionFunctions: IDictionary<IFunctionCondition> =
+    {};
 
   public static registerCustomConditionFunction(
     functionName: string,
@@ -53,7 +50,7 @@ export class ConditionUtil {
   public static resetCustomConditionFunctions() {
     ConditionUtil._customConditionFunctions = {};
   }
-  
+
   public static getCustomConditionFunctions() {
     return ConditionUtil._customConditionFunctions;
   }
@@ -88,8 +85,13 @@ export class ConditionUtil {
     }
 
     if (typeof condition === "object") {
-      if (!condition.Fn || !(ConditionUtil[condition.Fn] || 
-        ConditionUtil._customConditionFunctions[condition.Fn])) {
+      if (
+        !condition.Fn ||
+        !(
+          ConditionUtil[condition.Fn] ||
+          ConditionUtil._customConditionFunctions[condition.Fn]
+        )
+      ) {
         throw new AccessControlError(
           `Condition function:${condition.Fn} is not valid`
         );
@@ -127,13 +129,19 @@ export class ConditionUtil {
       }
 
       if (ConditionUtil[condition.Fn]) {
-          return (ConditionUtil[condition.Fn] as IConditionFunction).evaluate(condition.args, context);
-      } else if(ConditionUtil._customConditionFunctions[condition.Fn]) {
-          return ConditionUtil._customConditionFunctions[condition.Fn](context, condition.args);
+        return (ConditionUtil[condition.Fn] as IConditionFunction).evaluate(
+          condition.args,
+          context
+        );
+      } else if (ConditionUtil._customConditionFunctions[condition.Fn]) {
+        return ConditionUtil._customConditionFunctions[condition.Fn](
+          context,
+          condition.args
+        );
       } else {
         throw new AccessControlError(
-            `Condition function:${condition.Fn} is not found`
-          );
+          `Condition function:${condition.Fn} is not found`
+        );
       }
     }
 
@@ -153,7 +161,7 @@ export class ConditionUtil {
         wrap: false,
       });
       if (Array.isArray(jsonPathVal)) {
-        jsonPathVal = flattendeep(jsonPathVal);
+        jsonPathVal = _.flattenDeep(jsonPathVal);
       }
       return jsonPathVal;
     }
