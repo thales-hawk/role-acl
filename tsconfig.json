@@ -3,13 +3,12 @@
   "compilerOptions": {
     "declaration": true,
     "declarationDir": "./lib",
-    "target": "esnext",
+    "target": "es5",
     "module": "commonjs",
     "esModuleInterop": true,
     "moduleResolution": "node",
     "removeComments": false,
     "noLib": false,
-    "allowSyntheticDefaultImports": true, // For default import compatibility
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "lib": ["es2019"],

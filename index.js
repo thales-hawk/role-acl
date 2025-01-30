@@ -1,7 +1,4 @@
-// Replace the static require with dynamic import
-module.exports = async function () {
-  const { AccessControl } = await import("./lib/src");
-  // Assign the AccessControl to module.exports
-  module.exports = AccessControl;
-  module.exports.AccessControl = AccessControl;
-};
+var AC = require("./lib/src").AccessControl;
+module.exports = AC;
+// adding circular ref to allow easy importing in both ES5/6 and TS projects
+module.exports.AccessControl = AC;

@@ -1,5 +1,5 @@
-import AccessControl from "./index";
-import { matcher } from "matcher";
+const AccessControl = require("./index");
+const matcher = require("matcher");
 
 AccessControl.isAllowed = function (account, user, resource, action, context) {
   const acl = new AccessControl(account.acl);

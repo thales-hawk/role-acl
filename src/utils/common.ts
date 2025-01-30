@@ -8,7 +8,8 @@ import {
   ICondition,
 } from "../core";
 import _ from "lodash";
-import { matcher } from "./matcher";
+import Matcher from "matcher";
+
 export class CommonUtil {
   public static isStringOrArray(value: any): boolean {
     return typeof value === "string" || ArrayUtil.isFilledStringArray(value);
@@ -40,7 +41,7 @@ export class CommonUtil {
     const stringArray = ArrayUtil.toStringArray(strings);
     const patternArray = ArrayUtil.toStringArray(patterns);
 
-    return matcher(stringArray, patternArray).length !== 0;
+    return Matcher(stringArray, patternArray).length !== 0;
   }
 
   public static toExtendedJSON(o: any): string {
